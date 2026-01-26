@@ -10,20 +10,6 @@ from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.util import ngrams
 
 
-
-"""
-this script support:
-ANLS for DocVQA
-
-RelaxedAccuracy for ChartQA
-
-ContainAccuracy for MultimodalOCR LLM zero-shot text-recognition
-
-
-"""
-
-
-
 LIGATURES = {
     'ﬀ': 'ff',
     'ﬁ': 'fi',
@@ -57,102 +43,10 @@ LIGATURES = {
 LIGATURE_PATTERN = re.compile("|".join(map(re.escape, LIGATURES.keys())))
 
 
-
-def anls_metric(target: str, prediction: str, theta: float = 0.5):
-    """Calculates ANLS for DocVQA.
-
-    There does not seem to be an official evaluation script.
-    Public implementation on which this implementation is based:
-    https://github.com/herobd/layoutlmv2/blob/main/eval_docvqa.py#L92
-
-    Original paper (see Eq 1): https://arxiv.org/pdf/1907.00490.pdf
-
-    Args:
-        target: Target string.
-        prediction: Predicted string.
-        theta: Filter threshold set to 0.5 for DocVQA.
-
-    Returns:
-        ANLS score.
-    """
-
-    edit_distance = editdistance.eval(target, prediction)
-    normalized_ld = edit_distance / max(len(target), len(prediction))
-    return 1.0 - normalized_ld if normalized_ld < theta else 0.0
-
-def relaxed_correctness(target: str,
-                        prediction: str,
-                        max_relative_change: float = 0.05) -> bool:
-    """Calculates relaxed correctness.
-
-    The correctness tolerates certain error ratio defined by max_relative_change.
-    See https://arxiv.org/pdf/2203.10244.pdf, end of section 5.1:
-    “Following Methani et al. (2020), we use a relaxed accuracy measure for the
-    numeric answers to allow a minor inaccuracy that may result from the automatic
-    data extraction process. We consider an answer to be correct if it is within
-    5% of the gold answer. For non-numeric answers, we still need an exact match
-    to consider an answer to be correct.”
-
-    Args:
-    target: Target string.
-    prediction: Predicted string.
-    max_relative_change: Maximum relative change.
-
-    Returns:
-    Whether the prediction was correct given the specified tolerance.
-    """
-
-    def _to_float(text: str) -> Optional[float]:
-        try:
-            if text.endswith("%"):
-                # Convert percentages to floats.
-                return float(text.rstrip("%")) / 100.0
-            else:
-                return float(text)
-        except ValueError:
-            return None
-
-    prediction_float = _to_float(prediction)
-    target_float = _to_float(target)
-    if prediction_float is not None and target_float:
-        relative_change = abs(prediction_float - target_float) / abs(target_float)
-        return float(relative_change <= max_relative_change)
-    else:
-        return float(prediction.lower() == target.lower())
-
-
 def edit_thres_match(target: str, prediction: str, theta: float = 0.3):
     edit_distance = editdistance.eval(target, prediction)
     normalized_ld = edit_distance / max(len(target), 1)
     return 1.0 if normalized_ld <= theta else 0.0
-
-
-def exact_match(target: str, prediction: str):
-    return float(target == prediction)
-
-
-def any_match(target: str, prediction: str):
-    return 1.0 if (target and prediction) or (not target and not prediction) else 0.0
-
-
-def remove_special_chars_and_lower(s):
-    pattern = r"[^a-zA-Z0-9\s]"
-    # print('raw:', s)
-    s = re.sub(pattern, "", s)
-    # print('new:', s)
-    return s.lower()
-
-
-def contain_match(target:str, prediction:str):
-    def has_word(sentence, word):
-        pattern = r"\b" + re.escape(word) + r"\b"
-        match = re.search(pattern, sentence)
-        if match:
-            return True
-        else:
-            return False
-    # print(prediction, target, float(has_word(prediction, target)))
-    return float(has_word(prediction, target))
 
 
 def metric_calculate(
@@ -171,60 +65,6 @@ def metric_calculate(
         total += score
     score = (100.0 * total) / len(targets)
     return score, scores
-
-
-def metric_calculate_multiple_predictions(
-    targets: Sequence[Sequence[Any]],
-    predictions: Sequence[Sequence[Any]],
-    metric_fn: Callable[[Any, Any], Any],
-    normalize_fn: Callable[[Any], Any] = lambda v: v):
-    """
-    Aggregate target-prediction pair metrics over a dataset with multiple predictions per example.
-
-    Args:
-        targets: A sequence of target sequences (list of reference per example).
-        predictions: A sequence of prediction sequences (list of predictions per example).
-        metric_fn: A callable that takes two inputs (target, prediction) and returns a metric value.
-        normalize_fn: A callable that normalizes inputs before computing metrics.
-
-    Returns:
-        score: The average metric over all examples (weighted by the number of predictions per example).
-        example_scores: A list of metric averages per example.
-    """
-    assert len(targets) == len(predictions), "Targets and predictions must have the same length."
-    
-    total = 0
-    example_scores = []
-
-    for prediction_set, target_set in zip(predictions, targets):
-        # Empty target case 
-        if not target_set:
-            if not prediction_set: 
-                example_scores.append(1)
-                total += 1
-            else: 
-                example_scores.append(0)
-            continue
-
-        # Compute the score for each prediction in the set
-        prediction_scores = []
-        for prediction in prediction_set:
-            p = normalize_fn(prediction)
-            # Take the maximum score against all targets for this prediction
-            score = max(metric_fn(normalize_fn(t), p) for t in target_set)
-            prediction_scores.append(score)
-        
-        # Average the scores across predictions for this example
-        if prediction_scores:
-            avg_score = sum(prediction_scores) / len(prediction_scores) * 100
-        else:
-            avg_score = 0
-        example_scores.append(avg_score)
-        total += avg_score
-    
-    # Compute the overall average metric
-    overall_score = round(total / len(targets), 2)
-    return overall_score, example_scores
 
 
 def extract_ngrams_from_list(text_list, n):
@@ -375,6 +215,7 @@ def metric_calculate_f1(gts, preds, theta=0.3, n_gram=-1, micro=False):
         metric2score[f'micro_{prefix}f1'] = round(micro_f1 * 100, 2)
 
     return metric2score, metric2scores
+
 
 def metric_calculate_recall_per_category_asym(gts, preds, theta=0.3, n_gram=-1):
     """
@@ -750,16 +591,6 @@ def doc_evaluate(
     targets: Sequence[Sequence[Any]],
     predictions: Sequence[Any],
     **kwargs):
-    """Calculates evaluation metrics.
-
-    Args:
-    metric: metric names
-    targets: list of list
-    predictions: list
-
-    Returns:
-    dictionary with metric names as keys and metric value as values.
-    """
 
     assert metric in ['N1F1s', 'CaseF1', 'TokenRatio',
                     'micro_N1F1s', 'micro_N2F1s', 'micro_N3F1s', 'micro_N4F1s',
