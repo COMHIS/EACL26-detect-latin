@@ -30,7 +30,7 @@ We divided the annotated Latin segments into **12** language integration categor
 | **Tables and Charts** | Use of Latin in tabular data, genealogies, calendars, scientific diagrams, inflection tables, or mathematical charts. |
 | **Indexes and Catalogs** | Use of Latin in structured lists such as indices, bibliographies, book catalogs, or errata lists. |
 
-You can download the full dataset (images + annotations) at **[Zenodo](https://doi.org/10.5281/zenodo.18377924)**.
+You can download the full dataset (images + annotations) at **[Zenodo](https://doi.org/10.5281/zenodo.18377924)**. The dataset is licensed under **CC BY-NC 4.0**. Underlying historical materials are sourced from ECCO (Gale) and used for **non-commercial** academic research.
 
 ## 🤖 Model Outputs & Results
 Coming soon...
@@ -85,6 +85,9 @@ Coming soon...
 
     - After evaluation, results will be saved in `<SAVE_DIR>` as JSON files with detailed metrics.
 
+## Acknowledgements
+This project has received funding from the European Union’s Horizon Europe programme for research and innovation under MSCA Doctoral Networks 2022, Grant Agreement No. 101120349 and Grant Agreement No. 101119511. We also acknowledge CSC – IT Center for Science, Finland, for awarding this project access to the LUMI supercomputer, owned by the EuroHPC Joint Undertaking, hosted by CSC (Finland) and the LUMI consortium.
+
 ## 📝 TODO
 
 ◽️ Data content specification.
@@ -96,5 +99,3 @@ Coming soon...
 ◽️ Lingua baseline code.
 
 ◽️ Evaluation scripts further refactoring.
-
-◽️ Acknowledgement.
