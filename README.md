@@ -1,7 +1,7 @@
 # EACL26-detect-latin
 Official implementation and dataset of EACL 2026 paper 816: Detecting Latin in Historical Books with Large Language Models: A Multimodal Benchmark.
 
-📄 [Paper](https://arxiv.org/pdf/2510.19585) 
+📄 [Paper](https://arxiv.org/pdf/2510.19585) | 📊 [Slides](https://helsinkifi-my.sharepoint.com/:p:/g/personal/yuwu_ad_helsinki_fi/IQB0SeB8LM50SbSKUek5TvgqAfS2wmlfmhwyunOPMATloIs?e=CVa1rI) | 🖼️ [Poster](https://helsinkifi-my.sharepoint.com/:b:/g/personal/yuwu_ad_helsinki_fi/IQBvDirYN8fESJRC39DoxNaRAVHGZ2IsEEBWmTGEOa3uGZs?e=rTBrmy) | 🎬 [Video](https://helsinkifi-my.sharepoint.com/:v:/g/personal/yuwu_ad_helsinki_fi/IQDUE-EyDKOdT6mvj8sh_9UHATeJNDDtrZYwNRAi3itY45A?e=tvUFfr)
 
 ## Introduction
 This paper presents a novel task of extracting low-resourced and noisy Latin fragments from mixed-language historical documents with varied layouts. We benchmark and evaluate the performance of large foundation models against a multimodal dataset of 724 annotated pages. The results demonstrate that reliable Latin detection with contemporary zero-shot models is achievable, yet these models lack a functional comprehension of Latin. This study establishes a comprehensive baseline for processing Latin within mixed-language corpora, supporting quantitative analysis in intellectual history and historical linguistics.
