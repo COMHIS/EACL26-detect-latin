@@ -1,7 +1,7 @@
 # EACL26-detect-latin
 Official implementation and dataset of EACL 2026 paper 816: Detecting Latin in Historical Books with Large Language Models: A Multimodal Benchmark.
 
-📄 [Paper](https://arxiv.org/pdf/2510.19585) | 📊 [Slides](https://helsinkifi-my.sharepoint.com/:p:/g/personal/yuwu_ad_helsinki_fi/IQB0SeB8LM50SbSKUek5TvgqAfS2wmlfmhwyunOPMATloIs?e=CVa1rI) | 🖼️ [Poster](https://helsinkifi-my.sharepoint.com/:b:/g/personal/yuwu_ad_helsinki_fi/IQBvDirYN8fESJRC39DoxNaRAVHGZ2IsEEBWmTGEOa3uGZs?e=Y132V7) | 🎬 [Video](https://helsinkifi-my.sharepoint.com/:v:/g/personal/yuwu_ad_helsinki_fi/IQDUE-EyDKOdT6mvj8sh_9UHATeJNDDtrZYwNRAi3itY45A?e=tvUFfr)
+📄 [Paper](https://arxiv.org/pdf/2510.19585) | 📊 [Slides](https://helsinkifi-my.sharepoint.com/:p:/g/personal/yuwu_ad_helsinki_fi/IQB0SeB8LM50SbSKUek5TvgqAfS2wmlfmhwyunOPMATloIs?e=CVa1rI) | 🖼️ [Poster](https://helsinkifi-my.sharepoint.com/:b:/g/personal/yuwu_ad_helsinki_fi/IQBvDirYN8fESJRC39DoxNaRAVHGZ2IsEEBWmTGEOa3uGZs?e=Y132V7) | 🎬 [Video](https://helsinkifi-my.sharepoint.com/:v:/g/personal/yuwu_ad_helsinki_fi/IQDUE-EyDKOdT6mvj8sh_9UHATeJNDDtrZYwNRAi3itY45A?e=tvUFfr) | 🤗 [Dataset](https://huggingface.co/datasets/COMHIS/eacl26-detect-latin)
 
 ## Introduction
 This paper presents a novel task of extracting low-resourced and noisy Latin fragments from mixed-language historical documents with varied layouts. We benchmark and evaluate the performance of large foundation models against a multimodal dataset of 724 annotated pages. The results demonstrate that reliable Latin detection with contemporary zero-shot models is achievable, yet these models lack a functional comprehension of Latin. This study establishes a comprehensive baseline for processing Latin within mixed-language corpora, supporting quantitative analysis in intellectual history and historical linguistics.
@@ -32,7 +32,7 @@ We divided the annotated Latin segments into **12** language integration categor
 | **Tables and Charts** | Use of Latin in tabular data, genealogies, calendars, scientific diagrams, inflection tables, or mathematical charts. |
 | **Indexes and Catalogs** | Use of Latin in structured lists such as indices, bibliographies, book catalogs, or errata lists. |
 
-You can download the full dataset (images + annotations) at **[Zenodo](https://doi.org/10.5281/zenodo.18377924)**. The dataset is licensed under **CC BY-NC 4.0**. Underlying historical materials are sourced from ECCO (Gale) and used for **non-commercial** academic research.
+The full dataset (images + annotations) is available on **[Hugging Face](https://huggingface.co/datasets/COMHIS/eacl26-detect-latin)** and archived on **[Zenodo](https://doi.org/10.5281/zenodo.18377924)**. The dataset is licensed under **CC BY-NC 4.0**. Underlying historical materials are sourced from ECCO (Gale) and used for **non-commercial** academic research.
 
 ## 🤖 Model Outputs & Results
 Coming soon...
@@ -54,7 +54,7 @@ Coming soon...
     python -m vllm.entrypoints.openai.api_server --model <MODEL_NAME> --trust-remote-code 
     ```
 
-    - Replace `<MODEL_NAME>` with your model (supported by vLLM), e.g., OpenGVLab/InternVL3-38B.
+    - Replace `<MODEL_NAME>` with your model (supported bv vLLM), e.g., OpenGVLab/InternVL3-38B.
     - Keep the server running and open a new terminal to run inference.
 
 - Run the inference script to generate predictions:
@@ -88,16 +88,12 @@ Coming soon...
     - After evaluation, results will be saved in `<SAVE_DIR>` as JSON files with detailed metrics.
 
 ## Acknowledgements
-This project has received funding from the European Union’s Horizon Europe programme for research and innovation under MSCA Doctoral Networks 2022, Grant Agreement No. 101120349 and Grant Agreement No. 101119511. We also acknowledge CSC – IT Center for Science, Finland, for awarding this project access to the LUMI supercomputer, owned by the EuroHPC Joint Undertaking, hosted by CSC (Finland) and the LUMI consortium.
+This project has received funding from the European Union’s Horizon Europe programme for research and innovation under MSCA Doctoral Networks 2022, Grant Agreement No. 101120349 and Grant Agreement No. 101119511. We also acknowledge CSC – IT Center for Science, Finland, for awarding this project access to the LUMI supercomputer, owned by the EuroHPC Joint Undertaking, hosted by CSC (Finland) and the LUMMI consortium.
 
-## 📝 TODO
+## TODO
 
-◽️ Data content specification.
+✅ Data content specification.
 
 ◽️ Model output files to be released.
 
-◽️ vLLM inference pipeline testing.
-
 ◽️ Lingua baseline code.
-
-◽️ Evaluation scripts further refactoring.
